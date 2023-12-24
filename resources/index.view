@@ -1,0 +1,6 @@
+<svg>
+  <rect id="background" />
+  <use id="myButton" href="#text-button" class="text-button bottom application-fill" />
+  <text id="showText" />
+  <text id="codeShow" />
+</svg>

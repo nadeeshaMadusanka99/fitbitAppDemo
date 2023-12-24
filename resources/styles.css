@@ -1,0 +1,38 @@
+.defaultText {
+  font-size: 32;
+  font-family: System-Regular;
+  font-weight: regular;
+  text-length: 32;
+}
+
+#background {
+  width: 100%;
+  height: 100%;
+  fill: cornsilk;
+}
+
+.application-fill           { fill: fb-yellow; }
+.foreground-fill            { fill: fb-white; }
+.background-fill            { fill: fb-black; }
+
+#myButton #text {
+  text-buffer: "CONNECT TO APP";
+}
+#codeShow {
+  font-size: 70;
+  font-family: System-Bold;
+  text-length: 32;
+  text-anchor: middle;
+  x: 50%;
+  y: 50%+50;
+  fill: black;
+}
+#showText {
+  font-size: 25;
+  font-family: System-Regular;
+  text-length: 32;
+  text-anchor: middle;
+  x: 50%;
+  y: 50%-30;
+  fill: midnightblue;
+}
