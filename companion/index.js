@@ -1,7 +1,7 @@
 import * as messaging from "messaging";
 
 const BASE_URL =
-  "https://f3c4-2402-d000-8110-3bc-fd26-5f1-ccae-646c.ngrok-free.app";
+  "https://ad91-2402-d000-8110-3bc-fd26-5f1-ccae-646c.ngrok-free.app";
 
 let continuePolling = true;
 // Fetch the code from the server
@@ -18,19 +18,20 @@ async function getCodeFromServer() {
     if (!response.ok) {
       throw new Error("Error fetching data from server");
     }
-
+    // console.log("Response:", response);
     const data = await response.json();
-
+    const codeUserID_id = data.id;
+    console.log("Put this on the Postman to update:", codeUserID_id);
     // Send the code to the device
     if (messaging.peerSocket.readyState === messaging.peerSocket.OPEN) {
       messaging.peerSocket.send({ code: data.code, isUserIDNull: true });
     }
     const code = data.code;
-    
+
     // Get the UserID status from the server
     const checkCode = async () => {
       try {
-        const checkCodeResponse = await fetch(`${BASE_URL}/checkCode/C4YC4`, {
+        const checkCodeResponse = await fetch(`${BASE_URL}/checkCode/${code}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -42,8 +43,6 @@ async function getCodeFromServer() {
         }
 
         const checkCodeData = await checkCodeResponse.json();
-
-        console.log("Is UserID Null:", checkCodeData.isUserIDNull);
         if (messaging.peerSocket.readyState === messaging.peerSocket.OPEN) {
           // Send the code if isUserIDNull is true
           if (checkCodeData.isUserIDNull === true) {
@@ -75,9 +74,7 @@ async function getCodeFromServer() {
       }
     };
 
-    // Call the checkCode function initially
     checkCode();
-
     // Poll every 5 seconds while continuePolling is true
     const pollingInterval = setInterval(() => {
       if (continuePolling) {
