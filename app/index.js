@@ -23,30 +23,42 @@ messaging.peerSocket.onmessage = function (evt) {
 
   if (evt.data && evt.data.code) {
     const receivedCode = evt.data.code;
+    const isUserIDNull = evt.data.isUserIDNull;
     console.log("Received code from companion:", receivedCode);
-    //show the code and remove the connect button
-    showText.text = "Enter this code on your app:";
-    codeShow.text = receivedCode;
-    myButton.style.display = "none";
-    //save the code to a file in the device
-    let json_data = {
-      code: receivedCode,
-    };
-    
-    fs.writeFileSync("json.txt", json_data, "json", (err) => {
-      console.log("came inside the write file");
-      if (err) {
-        console.error("Error writing file:", err);
-      } else {
-        console.log("File saved");
-        fs.readFile("json.txt", "json", (err, data) => {
-          if (err) {
-            console.error("Error reading file:", err);
-          } else {
-            console.log("File content:", data);
-          }
-        });
-      }
-    });
+    console.log("Received userID status from companion:", isUserIDNull);
+    if (isUserIDNull === true) {
+      //show the code and remove the connect button
+      showText.text = "Enter this code on your app:";
+      codeShow.text = receivedCode;
+      myButton.style.display = "none";
+      return;
+    } else {
+      showText.style.fill = "black";
+      showText.text = "Connected to the app";
+      codeShow.style.fill = "darkgreen";
+      codeShow.text = "Welcome!";
+      myButton.style.display = "none";
+      return;
+    }
+
+    // //save the code to a file in the device
+    // let json_data = {
+    //   code: receivedCode,
+    // };
+
+    // fs.writeFileSync("json.txt", json_data, "json", (err) => {
+    //   if (err) {
+    //     console.error("Error writing file:", err);
+    //   } else {
+    //     console.log("File saved");
+    //     fs.readFile("json.txt", "json", (err, data) => {
+    //       if (err) {
+    //         console.error("Error reading file:", err);
+    //       } else {
+    //         console.log("File content:", data);
+    //       }
+    //     });
+    //   }
+    // });
   }
 };
