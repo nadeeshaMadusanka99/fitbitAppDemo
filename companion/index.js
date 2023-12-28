@@ -92,5 +92,34 @@ async function getCodeFromServer() {
 messaging.peerSocket.onmessage = function (evt) {
   if (evt.data && evt.data.message === true) {
     getCodeFromServer();
+  } else if (evt.data && evt.data.code &&evt.data.stepCount && evt.data.location) {
+    const stepData = {
+      code: evt.data.code || null,
+      stepCounts: evt.data.stepCount || null,
+      location: {
+        longitude: evt.data.location.longitude | null,
+        latitude: evt.data.location.latitude || null,
+      },
+    };
+    const jsonData = JSON.stringify(stepData);
+    fetch(`${BASE_URL}/stepLocation/658cebad90c90d1e9a7838c8`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: jsonData,
+    })
+      .then((response) => {
+        if (response.ok) {
+          console.log("Step count data sent successfully.");
+        } else {
+          console.error("Failed to send step count data.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error while sending step count data:", error);
+      });
+  } else {
+    console.log("No data");
   }
 };
